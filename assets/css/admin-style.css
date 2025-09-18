@@ -1,0 +1,57 @@
+/* Quick Search Replace Admin Styles */
+.qsrdb-wrap .qsrdb-card {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+    margin-top: 20px;
+}
+
+.qsrdb-wrap .qsrdb-card-header {
+    padding: 10px 20px;
+    border-bottom: 1px solid #c3c4c7;
+}
+
+.qsrdb-wrap .qsrdb-card-header h2 {
+    margin: 0;
+    padding: 0;
+    font-size: 1.2em;
+}
+
+.qsrdb-wrap .qsrdb-card-body {
+    padding: 2px 20px 20px;
+}
+
+.qsrdb-wrap .qsrdb-tables-list {
+    height: 250px;
+    overflow-y: scroll;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background-color: #fdfdfd;
+}
+
+.qsrdb-wrap .qsrdb-tables-list label {
+    display: block;
+}
+
+.qsrdb-wrap .qsrdb-actions {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+}
+
+.qsrdb-wrap .qsrdb-actions .button-primary {
+    background-color: #d63638;
+    border-color: #b02a2c;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 1px 0 #b02a2c;
+    text-shadow: 0 -1px 1px #b02a2c, 1px 0 1px #b02a2c, 0 1px 1px #b02a2c, -1px 0 1px #b02a2c;
+}
+
+.qsrdb-wrap .qsrdb-actions .button-primary:hover {
+    background: #c62f2f;
+    border-color: #9e2325;
+}
+
+.qsrdb-wrap .qsrdb-warning {
+    border-left: 4px solid #d63638;
+    padding: 10px 20px;
+}
