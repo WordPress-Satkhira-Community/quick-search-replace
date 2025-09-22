@@ -22,19 +22,16 @@ function qsrdb_render_admin_page() {
 	// Handle form submission.
 	if ( isset( $_POST['qsrdb_nonce'] ) && wp_verify_nonce( sanitize_key( $_POST['qsrdb_nonce'] ), 'qsrdb_action' ) ) {
 
-		// --- FIX APPLIED HERE: Unslash first, then sanitize. ---
-		// Unslash the entire POST array recursively.
-		$post_data = wp_unslash( $_POST );
-
-		// Sanitize the unslashed data.
-		$search          = isset( $post_data['qsrdb_search'] ) ? sanitize_text_field( $post_data['qsrdb_search'] ) : '';
-		$replace         = isset( $post_data['qsrdb_replace'] ) ? sanitize_text_field( $post_data['qsrdb_replace'] ) : '';
-		$selected_tables = isset( $post_data['qsrdb_tables'] ) ? array_map( 'sanitize_text_field', (array) $post_data['qsrdb_tables'] ) : array();
-		// --- END FIX ---
+		// --- FIX #2: Process specific POST inputs instead of the whole array ---
+		// This is more secure and performant. The correct order is isset -> unslash -> sanitize.
+		$search          = isset( $_POST['qsrdb_search'] ) ? sanitize_text_field( wp_unslash( $_POST['qsrdb_search'] ) ) : '';
+		$replace         = isset( $_POST['qsrdb_replace'] ) ? sanitize_text_field( wp_unslash( $_POST['qsrdb_replace'] ) ) : '';
+		$selected_tables = isset( $_POST['qsrdb_tables'] ) && is_array( $_POST['qsrdb_tables'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['qsrdb_tables'] ) ) : array();
+		$is_dry_run      = ! isset( $_POST['qsrdb_live_run'] );
+		// --- END FIX #2 ---
 
 		if ( ! empty( $search ) && ! empty( $selected_tables ) ) {
-			$is_dry_run = ! isset( $post_data['qsrdb_live_run'] );
-			$report     = qsrdb_run_search_replace( $search, $replace, $selected_tables, $is_dry_run );
+			$report = qsrdb_run_search_replace( $search, $replace, $selected_tables, $is_dry_run );
 
 			if ( ! $is_dry_run && $report ) {
 				// Best-effort update of core URLs (home / siteurl) if this is a domain move.
@@ -207,28 +204,7 @@ function qsrdb_render_admin_page() {
 			<p><?php esc_html_e( 'A "Dry Run" shows what would change; a "Live Run" performs those changes permanently.', 'quick-search-replace' ); ?></p>
 		</div>
 
-		<script>
-			document.addEventListener('DOMContentLoaded', function() {
-				var selAll = document.getElementById('qsrdb-select-all');
-				var desAll = document.getElementById('qsrdb-deselect-all');
-				if (selAll) {
-					selAll.addEventListener('click', function(e) {
-						e.preventDefault();
-						document.querySelectorAll('#qsrdb-tables input[type="checkbox"]').forEach(function(el) {
-							el.checked = true;
-						});
-					});
-				}
-				if (desAll) {
-					desAll.addEventListener('click', function(e) {
-						e.preventDefault();
-						document.querySelectorAll('#qsrdb-tables input[type="checkbox"]').forEach(function(el) {
-							el.checked = false;
-						});
-					});
-				}
-			});
-		</script>
+		
 	</div>
 	<?php
 }

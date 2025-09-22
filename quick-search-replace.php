@@ -17,7 +17,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-define( 'QSRDB_VERSION', '1.0.1' );
+define( 'QSRDB_VERSION', '1.2.0' );
 define( 'QSRDB_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 
 /**
@@ -44,7 +44,7 @@ add_action( 'network_admin_menu', 'qsrdb_add_admin_menu' );
 
 
 /**
- * Enqueue admin-specific stylesheets.
+ * Enqueue admin-specific stylesheets and scripts.
  *
  * @param string $hook The current admin page.
  */
@@ -61,5 +61,15 @@ function qsrdb_enqueue_admin_assets( $hook ) {
 		QSRDB_VERSION,
 		'all'
 	);
+
+	// --- Enqueue admin script ---
+	wp_enqueue_script(
+		'qsrdb-admin-script',
+		plugin_dir_url( __FILE__ ) . 'assets/js/admin-script.js',
+		array(), // No dependencies.
+		QSRDB_VERSION,
+		true // Load in the footer.
+	);
+	
 }
 add_action( 'admin_enqueue_scripts', 'qsrdb_enqueue_admin_assets' );
